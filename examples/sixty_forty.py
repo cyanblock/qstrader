@@ -13,8 +13,8 @@ from qstrader.trading.backtest import BacktestTradingSession
 
 
 if __name__ == "__main__":
-    start_dt = pd.Timestamp('2003-09-30 14:30:00', tz=pytz.UTC)
-    end_dt = pd.Timestamp('2019-12-31 23:59:00', tz=pytz.UTC)
+    start_dt = pd.Timestamp('2019-09-30 14:30:00', tz=pytz.UTC)
+    end_dt = pd.Timestamp('2021-12-31 23:59:00', tz=pytz.UTC)
 
     # Construct the symbols and assets necessary for the backtest
     strategy_symbols = ['SPY', 'AGG']
@@ -24,14 +24,17 @@ if __name__ == "__main__":
     # To avoid loading all CSV files in the directory, set the
     # data source to load only those provided symbols
     csv_dir = os.environ.get('QSTRADER_CSV_DATA_DIR', '.')
-    data_source = CSVDailyBarDataSource(csv_dir, Equity, csv_symbols=strategy_symbols)
-    data_handler = BacktestDataHandler(strategy_universe, data_sources=[data_source])
+    data_source = CSVDailyBarDataSource(
+        csv_dir, Equity, csv_symbols=strategy_symbols)
+    data_handler = BacktestDataHandler(
+        strategy_universe, data_sources=[data_source])
 
     # Construct an Alpha Model that simply provides
     # static allocations to a universe of assets
     # In this case 60% SPY ETF, 40% AGG ETF,
     # rebalanced at the end of each month
-    strategy_alpha_model = FixedSignalsAlphaModel({'EQ:SPY': 0.6, 'EQ:AGG': 0.4})
+    strategy_alpha_model = FixedSignalsAlphaModel(
+        {'EQ:SPY': 0.6, 'EQ:AGG': 0.4})
     strategy_backtest = BacktestTradingSession(
         start_dt,
         end_dt,
